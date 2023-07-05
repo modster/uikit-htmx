@@ -8,6 +8,8 @@
   <script src="https://unpkg.com/htmx.org@1.9.2"
     integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h"
     crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+  <script src="https://unpkg.com/htmx.org/dist/ext/morphdom-swap.js"></script>
   <link rel="stylesheet" href="css/uikit.min.css" />
   <script src="js/uikit.min.js"></script>
   <script src="js/uikit-icons.min.js"></script>
@@ -17,26 +19,27 @@
   <div class="uk-container uk-container-small uk-margin-large-top">
     <div class="uk-card uk-card-default uk-card-body">
       <h3 class="uk-card-title">Kline/Candlestick Data</h3>
-      <form class="uk-form-stacked" hx-post="login.php" hx-target="#connect">
-        <div class="uk-margin">
-          <label class="uk-form-label" for="form-stacked-text">Symbol</label>
-          <div class="uk-form-controls">
-            <input class="uk-input" id="form-stacked-text" type="text" name="symbol" required>
-          </div>
-        </div>
-        <div class="uk-margin">
-          <label class="uk-form-label" for="form-stacked-text">Interval</label>
-          <div class="uk-form-controls">
-            <input class="uk-input" id="form-stacked-text" type="interval" name="interval" required>
-          </div>
-        </div>
-        <div class="uk-margin">
-          <button class="uk-button uk-button-primary" type="submit">connect</button>
-        </div>
-      </form>
-    </div>
-    <div id="connect"></div>
-  </div>
+      <!-- will be interpreted as hx-swap-oob="true" by default -->
+      <!-- <div hx-ext="ws" ws-connect="wss://testnet.binance.vision/ws"> -->
+      <div hx-ext="ws" ws-connect="ws://localhost:1323/echo">
+        <!-- <div id="notifications"></div> -->
+        <!-- <div id="chart"> -->
+        <!-- <div hx-swap="outerHTML" hx-target="#chart"> -->
+        <!-- <div hx-get="/chart" hx-trigger="every 5s"></div> -->
+        <!-- </div> -->
+        <!-- </div> -->
+        <form id="form" ws-send>
+          <input name="connect">
+        </form>
+      </div>
+      <!-- will be appended to #notifications div -->
+      <div id="notifications" hx-swap-oob="beforeend">
+        New message received
+      </div>
+      <!-- will be swapped using an extension -->
+      <div id="chart" hx-swap-oob="morphdom">
+      </div>
+
 </body>
 
 </html>
